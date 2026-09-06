@@ -181,6 +181,7 @@ print()
 # 生成循环一字未动, 只有"概率从哪来"这一行换了:
 #   计数版:  p = P[ix]                      查表 (MLE 闭式解)
 #   神经网络: p = softmax(one_hot(ix) @ W)   现场计算 (梯度下降学出来的)
+
 print('同一颗种子 (2147483647) 各生成 5 个名字:')
 print('  计数版  :', sample_names(lambda ix: P[ix], n_names=5))
 print('  神经网络:', sample_names(nn_probs, n_names=5))
