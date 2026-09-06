@@ -8,7 +8,7 @@
 
 ## ✨ 这个仓库有什么
 
-- **逐行中文注释**:不只是翻译"这行代码做了什么",更记录"为什么这样写"——包括踩过的坑(梯度不清零、tanh 饱和、广播机制等)
+- **逐行中文注释**:不只是翻译"这行代码做了什么",更记录"为什么这样写"——包括踩过的坑(梯度不清零、广播机制、随机种子与 `generator`、tanh 饱和等)
 - **实验驱动**:每个关键结论都尽量用具体数字和可视化验证,而不是"书上这么说"
 - **与教程一一对应**:目录按 Zero to Hero 的课程顺序组织,方便边看视频边对照
 
@@ -17,14 +17,16 @@
 | 文件                                                       | 内容                                                                 | 状态  |
 | -------------------------------------------------------- | ------------------------------------------------------------------ | --- |
 | [`micrograd/micrograd.ipynb`](micrograd/micrograd.ipynb) | 从零实现反向传播引擎(micrograd)与小型 MLP                                       | ✅   |
-| [`makemore/Makemore.ipynb`](makemore/Makemore.ipynb)     | 名字生成模型:bigram 计数版(频数矩阵、`multinomial` 采样、并行化生成)已完成;接下来是 loss 与神经网络版 | 🚧  |
+| [`makemore/Makemore.ipynb`](makemore/Makemore.ipynb)     | 名字生成模型 Part 1:bigram 计数模型(MLE 闭式解)、负对数似然损失、`multinomial` 采样、神经网络版(one-hot → `W` → softmax,梯度下降学出对数计数)、L2 正则化 | ✅   |
+| makemore Part 2: 多层感知机 (MLP)                          | 引入隐藏层与非线性激活(`tanh`)、BatchNorm,从 bigram 升级为真正的神经网络           | 🚧  |
 
 > ✅ 已完成 ｜ 🚧 学习中 ｜ ⬜ 未开始
 
 ## 🧭 学习路线(Zero to Hero)
 
 1. **micrograd** ✅ — 手写自动求导引擎,理解反向传播的本质([视频](https://www.youtube.com/watch?v=VMj-3S1tku0) / [代码](https://github.com/karpathy/micrograd))
-2. **makemore** 🚧 学习中 — 从 bigram 计数到多层感知机,再到 Transformer 的前身([视频](https://www.youtube.com/watch?v=PaCmpygFfXo) / [代码](https://github.com/karpathy/makemore))
+2. **makemore Part 1** ✅ — bigram 语言模型:计数版 + 神经网络版,负对数似然损失与采样([视频](https://www.youtube.com/watch?v=PaCmpygFfXo) / [代码](https://github.com/karpathy/makemore))
+3. **makemore Part 2** 🚧 建设中 — 多层感知机 (MLP):嵌入、隐藏层、`tanh` 与 BatchNorm([视频](https://www.youtube.com/watch?v=TCH_1BHY58) / [代码](https://github.com/karpathy/makemore))
 
 ## 🚀 快速开始
 
