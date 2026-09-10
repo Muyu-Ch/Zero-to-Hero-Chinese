@@ -18,7 +18,8 @@
 | -------------------------------------------------------- | ------------------------------------------------------------------ | --- |
 | [`micrograd/micrograd.ipynb`](micrograd/micrograd.ipynb) | 从零实现反向传播引擎(micrograd)与小型 MLP                                       | ✅   |
 | [`makemore/Makemore.ipynb`](makemore/Makemore.ipynb)     | 名字生成模型 Part 1:bigram 计数模型(MLE 闭式解)、负对数似然损失、`multinomial` 采样、神经网络版(one-hot → `W` → softmax,梯度下降学出对数计数)、L2 正则化 | ✅   |
-| makemore Part 2: 多层感知机 (MLP)                          | 引入隐藏层与非线性激活(`tanh`)、BatchNorm,从 bigram 升级为真正的神经网络           | 🚧  |
+| makemore Part 2: 多层感知机 (MLP)                          | 引入隐藏层与非线性激活(`tanh`),从 bigram 升级为真正的神经网络;旋钮炼丹与学习率搜索     | ✅   |
+| makemore Part 3: Activations & Gradients & BatchNorm       | 诊断激活与梯度:tanh 饱和、死亡神经元,用 BatchNorm 稳定训练                 | 🚧  |
 
 > ✅ 已完成 ｜ 🚧 学习中 ｜ ⬜ 未开始
 
@@ -26,13 +27,14 @@
 
 1. **micrograd** ✅ — 手写自动求导引擎,理解反向传播的本质([视频](https://www.youtube.com/watch?v=VMj-3S1tku0) / [代码](https://github.com/karpathy/micrograd))
 2. **makemore Part 1** ✅ — bigram 语言模型:计数版 + 神经网络版,负对数似然损失与采样([视频](https://www.youtube.com/watch?v=PaCmpygFfXo) / [代码](https://github.com/karpathy/makemore))
-3. **makemore Part 2** 🚧 建设中 — 多层感知机 (MLP):嵌入、隐藏层、`tanh` 与 BatchNorm([视频](https://www.youtube.com/watch?v=TCH_1BHY58) / [代码](https://github.com/karpathy/makemore))
+3. **makemore Part 2** ✅ — 多层感知机 (MLP):嵌入、隐藏层、`tanh` 与 BatchNorm([视频](https://www.youtube.com/watch?v=TCH_1BHY58) / [代码](https://github.com/karpathy/makemore))
+4. **makemore Part 3** 🚧 建设中 — Activations & Gradients & BatchNorm:激活函数诊断、死亡神经元与 BatchNorm([视频](https://www.youtube.com/watch?v=P6sfmUTpUmc) / [代码](https://github.com/karpathy/makemore))
 
 ## 🚀 快速开始
 
 ### 环境
 
-- 个人使用m芯片macbook进行学习，但全程不涉及复杂环境，可使用任意系统电脑；一下环境安装部分适用于macos与linux环境。windows用户们请自行配置环境
+- 个人使用m芯片macbook进行学习，但全程不涉及复杂环境，可使用任意系统电脑；以下环境安装部分适用于macos与linux环境。windows用户们请自行配置环境
 
 - 仓库自带 `venv/` 虚拟环境(Python 3.14.6 + PyTorch 2.13.0 + NumPy 2.5.2 + Matplotlib 3.11.1):
 
