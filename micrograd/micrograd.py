@@ -57,6 +57,10 @@ class Value:
     def __radd__(self, other):
         return self + other
 
+    # -a (a - b 是用 self + (-other) 实现的, 依赖这一条)
+    def __neg__(self):
+        return self * -1
+
     # a - b
     def __sub__(self, other):
         return self + (-other)
