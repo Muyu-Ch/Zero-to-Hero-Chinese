@@ -49,13 +49,7 @@ Part 2 的 MLP 能跑通,但跑得"心里没底":激活值往 tanh 两端跑(饱
 2. **makemore Part 1** ✅ — bigram 语言模型:计数版 + 神经网络版,负对数似然损失与采样([视频](https://www.youtube.com/watch?v=PaCmpygFfXo) / [代码](https://github.com/karpathy/makemore))
 3. **makemore Part 2** ✅ — 多层感知机 (MLP):嵌入、隐藏层、`tanh` 与学习率搜索([视频](https://www.youtube.com/watch?v=TCH_1BHY58) / [代码](https://github.com/karpathy/makemore))
 4. **makemore Part 3** ✅ — Activations & Gradients & BatchNorm:激活诊断、死亡神经元、初始化与批归一化([视频](https://www.youtube.com/watch?v=P6sfmUTpUmc) / [代码](https://github.com/karpathy/makemore))
-5. **makemore Part 4** ⬜ — Becoming a Backprop Ninja:扔掉 autograd,手动反向传播([视频](https://www.youtube.com/watch?v=q8SA3rM6ckI) / [代码](https://github.com/karpathy/makemore))
-6. **makemore Part 5** ⬜ — Building a WaveNet:把上下文从 3 个字符扩到 8 个,用层级结构(膨胀卷积)吃更长历史([视频](https://www.youtube.com/watch?v=t3YJ5hKiMQ0) / [代码](https://github.com/karpathy/makemore))
-7. **Let's build GPT** ⬜ — 从零手写 Transformer,拼出第一个 GPT([视频](https://www.youtube.com/watch?v=kCc8FmEb1nY) / [代码](https://github.com/karpathy/ng-video-lecture))
-8. **Let's build the GPT Tokenizer** ⬜ — 拆开分词器,手写 BPE([视频](https://www.youtube.com/watch?v=zduSFxRajkE) / [代码](https://github.com/karpathy/minbpe))
-9. **Let's reproduce GPT-2 (124M)** ⬜ — 完整复现 GPT-2([视频](https://www.youtube.com/watch?v=l8pRSuU81PU) / [代码](https://github.com/karpathy/build-nanogpt))
-
-> 根目录的 `input.txt` 是 `tinyshakespeare` 语料(40000 行),给后面 GPT 部分备用。
+5. **makemore Part 4** 🚧 建设中 — Becoming a Backprop Ninja:扔掉 autograd,手动反向传播([视频](https://www.youtube.com/watch?v=q8SA3rM6ckI) / [代码](https://github.com/karpathy/makemore))
 
 ## 🚀 快速开始
 
