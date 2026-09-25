@@ -21,7 +21,7 @@ import random
 # ---------------------------------------------------------------
 # 0. 数据准备
 # ---------------------------------------------------------------
-words=open("./makemore_5/names.txt","r").read().splitlines()
+words=open("..names.txt","r").read().splitlines()
 
 chars=sorted(list(set(''.join(words))))
 stoi={s:i+1 for i,s in enumerate(chars)}

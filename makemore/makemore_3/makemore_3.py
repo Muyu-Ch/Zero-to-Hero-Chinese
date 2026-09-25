@@ -114,7 +114,7 @@ class Tanh:
 # ===============================================================
 # 2. 数据准备
 # ===============================================================
-DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'names.txt')
+DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../names.txt')
 words = open(DATA, 'r').read().splitlines()           # 32033 个名字
 print(f'[数据] 共 {len(words)} 个名字, 例如: {words[:3]}')
 

@@ -22,7 +22,7 @@ import torch.nn.functional as F
 # ---------------------------------------------------------------
 # 0. 数据准备
 # ---------------------------------------------------------------
-DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'names.txt')
+DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../names.txt')
 words = open(DATA, 'r').read().splitlines()      # 32033 个名字
 
 chars = sorted(list(set(''.join(words))))        # 26 个小写字母
