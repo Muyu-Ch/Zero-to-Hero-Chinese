@@ -12,13 +12,15 @@ Part 4 把自动求导拿掉: 每个中间量的梯度都手写公式算出来, 
 参考: Andrej Karpathy - Neural Networks: Zero to Hero (makemore Part 4)
 """
 
+import os
 import torch
 import torch.nn.functional as F
 
 # ---------------------------------------------------------------
 # 0. 数据准备
 # ---------------------------------------------------------------
-words=open("../names.txt","r").read().splitlines()
+DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../names.txt')
+words=open(DATA,"r").read().splitlines()
 chars=sorted(list(set(''.join(words))))
 stoi={s:i+1 for i,s in enumerate(chars)}
 stoi['.']=0

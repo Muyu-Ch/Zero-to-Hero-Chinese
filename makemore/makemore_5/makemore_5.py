@@ -14,6 +14,7 @@ Linear / BatchNorm1d / Tanh / Embedding / FlattenConsecutive / Sequential。
 参考: Andrej Karpathy - Neural Networks: Zero to Hero (makemore Part 5)
 """
 
+import os
 import torch
 import torch.nn.functional as F
 import random
@@ -21,7 +22,8 @@ import random
 # ---------------------------------------------------------------
 # 0. 数据准备
 # ---------------------------------------------------------------
-words=open("..names.txt","r").read().splitlines()
+DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../names.txt')
+words=open(DATA,"r").read().splitlines()
 
 chars=sorted(list(set(''.join(words))))
 stoi={s:i+1 for i,s in enumerate(chars)}
