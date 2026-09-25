@@ -142,6 +142,7 @@ python demo.py
 
 - 代码跟写自 Andrej Karpathy 的公开教程与仓库(MIT License),中文注释与整理为个人学习记录
 - 本人是初学者,注释里可能有理解不到位的地方,欢迎提 [issue](https://github.com/Muyu-Ch/zero-to-hero-zh/issues) 或 PR 指正
+- README是在我学习完之后由DeepSeek-v4-flash生成
 
 ## 📄 License
 
