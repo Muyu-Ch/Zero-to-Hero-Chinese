@@ -31,6 +31,7 @@
 | [`makemore/makemore_4/`](makemore/makemore_4/makemore_4.ipynb) | **Part 4** 手动反向传播 (Backprop Ninja):删掉 `loss.backward()`,从 `cross_entropy` 一路手推 `dlogits` → `dW2/db2` → tanh → BatchNorm(全篇最难的一步) → `dW1/db1`,最后把 `dC` 用 scatter-add 填回嵌入表;每步都拿 `cmp()` 跟 autograd 对拍 | ✅   |
 | [`makemore/makemore_5/`](makemore/makemore_5/makemore_5.ipynb) | **Part 5** 分层网络 (WaveNet 式):上下文拉到 8 个字符,用 `FlattenConsecutive(2)` 把相邻字符两两合并(8→4→2→1),低层看相邻、高层看整块;组件全部改写成 nn.Module 风格的小类再拼成 `Sequential` | ✅   |
 | [`demo.ipynb`](demo.ipynb) / [`demo.py`](demo.py) | 开胃小菜:用 C++ 的 `vector<vector<...>>` 类比 PyTorch 张量,顺一遍 shape / view / 广播这些天天要打交道的东西                                                              | ✅   |
+| [`namesgenerator.py`](namesgenerator.py)       | **免训练版生成器**:加载 Part 5 训好的权重(`makemore/makemore_5/names_model.pt`),`python3 namesgenerator.py` 直接就出名字,不读语料、不训练                                                                     | ✅   |
 
 > ✅ 已完成 ｜ 🚧 建设中 ｜ ⬜ 未开始
 >
@@ -124,6 +125,14 @@ pip install -r requirements.txt
 ```bash
 python makemore/makemore_5/makemore_5.py
 ```
+
+- 不想等训练、只想看成品?根目录的 `namesgenerator.py` 直接加载 Part 5 训好的权重采样名字:权重放在 `makemore/makemore_5/names_model.pt`(由 `makemore_5.py` 训练结束时写出,重训一次就会自动用上新的),模型结构、采样逻辑与 Part 5 一模一样,只是跳过了 20 万步训练:
+
+```bash
+python3 namesgenerator.py
+```
+
+> 直接敲 `python3` 时用的是系统 python,里面通常没有 torch。脚本会自己检查:发现不在虚拟环境里、而仓库里又有 `venv/`,就自动换成 `venv/bin/python` 重新跑一遍自己,所以不激活环境也能跑;实在找不到 venv 才会提示你先 `source venv/bin/activate`。
 
 - `.ipynb` 建议使用Jupyter Lab打开:
 

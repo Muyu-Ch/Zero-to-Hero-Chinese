@@ -243,6 +243,16 @@ for i in range(max_steps):
 
 print(f'[训练] 结束, 最后一步 minibatch loss = {loss.item():.4f}')
 
+# 保存训练好的权重: 仓库根目录的 namesgenerator.py 加载这个文件, 就能跳过训练直接生成名字
+SAVE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'names_model.pt')
+torch.save({
+    'params': [p.data.clone() for p in parameters],        # 顺序与 model.parameters() 一致
+    'bn_running': [(l.running_mean.clone(), l.running_var.clone())
+                   for l in model.layers if isinstance(l, BatchNorm1d)],
+    'vocab': ''.join(itos[i] for i in range(vocab_size)),  # '.abcdefghijklmnopqrstuvwxyz'
+}, SAVE_PATH)
+print(f'[保存] 权重已写入 {SAVE_PATH}')
+
 # ---------------------------------------------------------------
 # 5. 评估: 训练集 / 验证集 各算一次 loss
 # ---------------------------------------------------------------
