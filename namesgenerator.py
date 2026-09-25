@@ -205,12 +205,14 @@ def generate(n=20, seed=SEED):
         while True:
             logits=model(torch.tensor([context]))      # 括号造批维度: (1, 8)
             probs=F.softmax(logits,dim=1)
-            ix=torch.multinomial(probs,num_samples=1,generator=g).item()
+            ix=torch.multinomial(probs,num_samples=1).item()
             context=context[1:]+[ix]                   # 滑动窗口: 丢最老, 接最新
             out.append(itos[ix])
             if ix==0:                                  # 抽到 '.' 名字结束
                 break
         print('  '+''.join(out))
 
-print('[生成] 20 个名字:')
-generate()
+print("生成几个名字？")
+n=int(input())
+print('[生成]',n,'个名字:')
+generate(n)
