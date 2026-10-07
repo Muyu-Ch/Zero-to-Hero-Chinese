@@ -143,6 +143,7 @@ def estimate_loss():
 
 class Head(nn.Module):
     """ one head of self-attention 自注意力机制中的单个注意力头 """
+    # trill: Tensor  # 加上这一行！显式声明buffer是Tensor
 
     # 继承 nn.Module，PyTorch 才能自动管理它的参数，支持 .to(device)、.parameters()、.train() 等
 
@@ -157,7 +158,7 @@ class Head(nn.Module):
         self.value = nn.Linear(n_embd, head_size, bias=False)
         # value 线性层：投影成 128 维的「值」
         # 同一个 x 经过三个不同矩阵，扮演三种角色：我在找什么(q)、我有什么(k)、我能提供什么(v)
-        self.register_buffer('tril', torch.tril(torch.ones(block_size, block_size)))
+        self.register_buffer('trill', torch.tril(torch.ones(block_size, block_size)))
         # torch.ones(256,256) 全 1 矩阵，torch.tril 取「下三角」（含对角线），其余位置为 0
         # 这就是因果掩码：第 t 行只有前 t+1 个位置是 1，用来禁止看到未来
         # register_buffer 把它注册为缓冲区：会跟着 .to(device) 移动、会存进 state_dict，但不算可训练参数
@@ -180,7 +181,7 @@ class Head(nn.Module):
         # q @ k^T：每个位置 t 的 query 与每个位置 s 的 key 做点积，衡量两者有多「相关」，结果形状 (64, 256, 256)
         # transpose(-2,-1) 交换最后两维，相当于对每个 batch 单独把 (T,hs) 转置成 (hs,T)
         # 乘 k.shape[-1]**-0.5 即 1/sqrt(64)=1/8 做缩放：维度越大点积数值越大，softmax 会变得极端尖锐、梯度消失
-        wei = wei.masked_fill(self.tril[:T, :T] == 0, float('-inf')) # (B, T, T)
+        wei = wei.masked_fill(self.trill[:T, :T] == 0, float('-inf')) # (B, T, T)
         # 把「上三角」（未来位置）的分数全填成 -inf，这样 softmax 之后那些位置的权重正好是 0
         # 用 [:T,:T] 切片是因为 block_size(256) 可能大于当前实际序列长度 T，(B,T,T) 需要能对得上
         wei = F.softmax(wei, dim=-1) # (B, T, T)
@@ -429,5 +430,5 @@ context = torch.zeros((1, 1), dtype=torch.long, device=device)
 # 生成起点：batch=1、长度=1，内容是 0 —— 0 号字符就是换行符 '\n'
 print(decode(m.generate(context, max_new_tokens=500)[0].tolist()))
 # generate 返回 (1, 501) → [0] 取出第一个（也是唯一一个）batch 得到 (501,) → tolist() 转成 Python 列表 → decode 转回文字
-#open('more.txt', 'w').write(decode(m.generate(context, max_new_tokens=10000)[0].tolist()))
+open('more.txt', 'w').write(decode(m.generate(context, max_new_tokens=10000)[0].tolist()))
 # 被注释掉的一行：生成 10000 个字符并写入 more.txt
