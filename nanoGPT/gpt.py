@@ -17,11 +17,11 @@ from torch.nn import functional as F
 # hyperparameters 超参数
 # 下面这些是训练前就定好的配置，决定模型多大、训练多久
 
-batch_size = 64 # how many independent sequences will we process in parallel? 并行处理多少个独立的序列？
-# 每次训练同时处理 64 条独立的文本序列（一个 batch 里的样本数）
+batch_size = 32 # how many independent sequences will we process in parallel? 并行处理多少个独立的序列？
+# 每次训练同时处理 32 条独立的文本序列（一个 batch 里的样本数）
 
-block_size = 256 # what is the maximum context length for predictions? 预测时最大的上下文长度是多少？
-# 每条序列的长度上限（上下文窗口）：模型一次最多能看到 256 个字符的历史
+block_size = 24 # what is the maximum context length for predictions? 预测时最大的上下文长度是多少？
+# 每条序列的长度上限（上下文窗口）：模型一次最多能看到 24 个字符的历史
 
 max_iters = 5000 # 最大训练迭代次数
 # 训练循环总共跑 5000 步，每一步处理一个 batch
@@ -38,11 +38,11 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu' # 有 GPU 就用 GPU，�
 eval_iters = 200 # 评估时平均多少个 batch 的损失
 # 评估时连续抽 200 个 batch 求平均：单次 loss 噪声太大，平均后曲线才平滑可靠
 
-n_embd = 384 # 嵌入向量（特征）的维度
-# 每个 token 用 384 个数字表示，也就是代码里到处出现的通道数 C
+n_embd = 128 # 嵌入向量（特征）的维度
+# 每个 token 用 128 个数字表示，也就是代码里到处出现的通道数 C
 
-n_head = 6 # 自注意力头的数量
-# 多头注意力拆成 6 个头并行计算，所以每个头的维度 = 384 / 6 = 64
+n_head = 8 # 自注意力头的数量
+# 多头注意力拆成 8 个头并行计算，所以每个头的维度 = 128 / 8 = 16
 
 n_layer = 6 # Transformer 块的层数
 # 把 Transformer Block 堆叠 6 层，层数越深、表达能力越强
@@ -103,14 +103,16 @@ def get_batch(split):
     # 随机抽 64 个起始位置，每个在 [0, len(data)-block_size) 之间
     # 上界减去 block_size 是为了保证后面 i+block_size+1 不会越界
     x = torch.stack([data[i:i+block_size] for i in ix])
-    # 每个起点取连续 256 个字符作为输入；torch.stack 把 64 个长度 256 的向量叠成 (64, 256)
+    # 每个起点取连续 24 个字符作为输入；torch.stack 把 32 个长度 24 的向量叠成 (32, 24)
     y = torch.stack([data[i+1:i+block_size+1] for i in ix])
     # y 就是 x 整体右移一位：x 在位置 t 的目标，是原文的「下一个字符」x[t+1]
     # 所以 y 的每一行是同一段文本往后错一格，语言模型学的正是「给定前文预测下一个」
     x, y = x.to(device), y.to(device)
     # 把数据搬到和模型相同的设备（GPU 或 CPU）上，否则计算时会报设备不匹配
     return x, y
-    # 返回输入 (64, 256) 和目标 (64, 256)
+    # 返回输入 (
+    # 
+    # 64, 256) 和目标 (64, 256)
 
 @torch.no_grad()
 # 装饰器：这个函数内部不构建计算图、不计算梯度，省显存也更快（评估不需要反向传播）
@@ -145,15 +147,15 @@ class Head(nn.Module):
     # 继承 nn.Module，PyTorch 才能自动管理它的参数，支持 .to(device)、.parameters()、.train() 等
 
     def __init__(self, head_size):
-        # head_size 是这个头输出的维度，这里 = n_embd // n_head = 384 // 6 = 64
+        # head_size 是这个头输出的维度，这里 = n_embd // n_head = 128 // 8 = 16
         super().__init__()
         # 先初始化父类 nn.Module，这必须是 __init__ 的第一步
         self.key = nn.Linear(n_embd, head_size, bias=False)
-        # key 线性层：把 384 维输入投影成 64 维的「键」；bias=False 是因为后面接 LayerNorm，偏置会被抵消掉
+        # key 线性层：把 128 维输入投影成 16 维的「键」；bias=False 是因为后面接 LayerNorm，偏置会被抵消掉
         self.query = nn.Linear(n_embd, head_size, bias=False)
-        # query 线性层：投影成 64 维的「查询」
+        # query 线性层：投影成 128 维的「查询」
         self.value = nn.Linear(n_embd, head_size, bias=False)
-        # value 线性层：投影成 64 维的「值」
+        # value 线性层：投影成 128 维的「值」
         # 同一个 x 经过三个不同矩阵，扮演三种角色：我在找什么(q)、我有什么(k)、我能提供什么(v)
         self.register_buffer('tril', torch.tril(torch.ones(block_size, block_size)))
         # torch.ones(256,256) 全 1 矩阵，torch.tril 取「下三角」（含对角线），其余位置为 0
@@ -268,10 +270,10 @@ class Block(nn.Module):
 
     def forward(self, x):
         # x: (B, T, 384)
-        x = x + self.sa(self.ln1(x))
+        x = x+self.sa(self.ln1(x))
         # 先 LayerNorm，再进注意力，最后和原 x 相加 —— 这就是残差连接
         # 残差让梯度可以「抄近路」直接回传，是深层网络能训起来的关键；也要求子层输出维度和 x 一致
-        x = x + self.ffwd(self.ln2(x))
+        x = x+self.ffwd(self.ln2(x))
         # 同样结构：LayerNorm → 前馈网络 → 残差相加
         # 这种「先归一化再进子层」的写法叫 Pre-Norm，比原论文的 Post-Norm 更容易训练
         return x
@@ -289,7 +291,9 @@ class GPTLanguageModel(nn.Module):
         self.position_embedding_table = nn.Embedding(block_size, n_embd)
         # 位置嵌入表：(256, 384)。第 t 个位置有自己专属的一行向量
         # 为什么需要位置信息：注意力本质是「对集合加权求和」，本身不区分顺序，必须显式把位置喂进去
-        self.blocks = nn.Sequential(*[Block(n_embd, n_head=n_head) for _ in range(n_layer)])
+        self.blocks = nn.Sequential(
+            *[Block(n_embd, n_head=n_head) for _ in range(n_layer)]
+        )
         # 生成 6 个 Block 并按顺序串联；* 把列表解包成一个个位置参数传给 Sequential
         self.ln_f = nn.LayerNorm(n_embd) # final layer norm 最后一层 LayerNorm
         # 所有 Block 之后的最后一次归一化
@@ -351,7 +355,7 @@ class GPTLanguageModel(nn.Module):
             # 交叉熵：内部会自动做 log_softmax，所以传进来的必须是没归一化的原始 logits
             # 每个位置的预测各贡献一份损失，最终取平均
 
-        return logits, loss
+        return logits,loss
         # 返回打分和损失（生成时 loss 为 None）
 
     def generate(self, idx, max_new_tokens):
