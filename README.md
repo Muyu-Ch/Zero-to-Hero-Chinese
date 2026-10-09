@@ -96,7 +96,7 @@ Part 4 之前的网络都是一根筋:把上下文整段拍平成一长条,一�
 4. **makemore Part 3** ✅ — Activations & Gradients & BatchNorm:激活诊断、死亡神经元、初始化与批归一化([视频](https://www.youtube.com/watch?v=P6sfmUTpUmc) / [代码](https://github.com/karpathy/makemore))
 5. **makemore Part 4** ✅ — Becoming a Backprop Ninja:扔掉 autograd 手动反向传播,每个中间量的梯度都跟 autograd 对拍([视频](https://www.youtube.com/watch?v=q8SA3rM6ckI) / [代码](https://github.com/karpathy/makemore))
 6. **makemore Part 5** ✅ — Building a WaveNet:上下文拉到 8 个字符,分层合并成树状结构,顺手把 PyTorch 的 `nn.Module` 拆开看([视频](https://www.youtube.com/watch?v=t3YJ5hKiMQ0) / [代码](https://github.com/karpathy/makemore))
-7. **Let's build GPT** 🚧 建设中 — 从零手写 Transformer / GPT:自注意力、多头、残差、LayerNorm,一路写到 nanoGPT([视频](https://www.youtube.com/watch?v=kCc8FmEb1nY) / [代码](https://github.com/karpathy/ng-video-lecture))
+7. **Let's build GPT** ✅ — 从零手写 Transformer / GPT:自注意力、多头、残差、LayerNorm,一路写到 nanoGPT([视频](https://www.youtube.com/watch?v=kCc8FmEb1nY) / [代码](https://github.com/karpathy/ng-video-lecture))
 
 ## 🚀 快速开始
 
