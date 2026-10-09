@@ -2,9 +2,9 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-> 从零手写并理解神经网络与语言模型。
+> 从零手写并理解神经网络与语言模型 —— **全系列已完结 ✅,可以直接开读**。
 > 
-> 全程跟随 [Andrej Karpathy 的 Neural Networks: Zero to Hero](https://karpathy.ai/zero-to-hero.html) 系列,代码逐行配上中文注释与自己的思考,希望为中文学习者提供一个可以对照教程轻松读懂的伴读仓库。
+> 全程跟随 [Andrej Karpathy 的 Neural Networks: Zero to Hero](https://karpathy.ai/zero-to-hero.html) 系列(从 micrograd、makemore 五连,一路到 Let's build GPT),代码逐行配上中文注释与自己的思考,希望为中文学习者提供一个可以对照教程轻松读懂的伴读仓库。
 
 ## ✨ 这个仓库有什么
 
@@ -12,13 +12,14 @@
 - **实验驱动**:每个关键结论都尽量用具体数字和可视化验证,而不是"书上这么说"——Part 3 的笔记本里画了几十张训练曲线与激活/梯度分布图,就是为了亲眼看见"tanh 饱和""梯度消失"长什么样
 - **与教程一一对应**:目录按 Zero to Hero 的课程顺序组织,方便边看视频边对照
 
-每门课一个目录(`makemore/` 下每个 Part 一个子目录),每个 Part 目录里放两样东西,再加一份五个 Part 共用的语料:
+每门课一个目录(`makemore/` 下每个 Part 一个子目录),每个目录里放两样东西,语料随章附带:
 
 | 文件              | 用途                                                    |
 | --------------- | ----------------------------------------------------- |
 | `*.ipynb`       | **主看这个**:逐行中文注解 + 训练曲线与分布图,可以逐步运行、随手改                  |
-| `*.py`          | 把笔记本整理成一份能直接跑的脚本,`python xxx.py` 就能从训练跑到生成名字           |
-| `makemore/names.txt` | 课程用的名字语料(32033 个),五个 Part 共用这一份,脚本各自都能找到它              |
+| `*.py`          | 把笔记本整理成一份能直接跑的脚本,`python xxx.py` 就能一路从训练跑到生成            |
+| `makemore/names.txt` | makemore 用的名字语料(32033 个),五个 Part 共用这一份,脚本各自都能找到它        |
+| `nanoGPT/input.txt` | GPT 章用的 tinyshakespeare 语料(约 111 万字符、65 种字符),根目录的 `input.txt` 是同一份 |
 
 ## 📁 目录与进度
 
@@ -30,12 +31,12 @@
 | [`makemore/makemore_3/`](makemore/makemore_3/makemore_3.ipynb)    | **Part 3** 激活值 / 梯度 / BatchNorm:手写 `Linear` / `BatchNorm1d` / `Tanh` 并留下每层 `self.out` 做"体检";何恺明初始化;用 BatchNorm 稳定深网络                                                   | ✅   |
 | [`makemore/makemore_4/`](makemore/makemore_4/makemore_4.ipynb) | **Part 4** 手动反向传播 (Backprop Ninja):删掉 `loss.backward()`,从 `cross_entropy` 一路手推 `dlogits` → `dW2/db2` → tanh → BatchNorm(全篇最难的一步) → `dW1/db1`,最后把 `dC` 用 scatter-add 填回嵌入表;每步都拿 `cmp()` 跟 autograd 对拍 | ✅   |
 | [`makemore/makemore_5/`](makemore/makemore_5/makemore_5.ipynb) | **Part 5** 分层网络 (WaveNet 式):上下文拉到 8 个字符,用 `FlattenConsecutive(2)` 把相邻字符两两合并(8→4→2→1),低层看相邻、高层看整块;组件全部改写成 nn.Module 风格的小类再拼成 `Sequential` | ✅   |
+| [`nanoGPT/nanoGPT.ipynb`](nanoGPT/nanoGPT.ipynb) | **Let's build GPT(上)** 从 bigram 基线到自注意力:数据换成 tinyshakespeare,先验证"平均前文"的三种等价写法(手写循环 / `tril` 矩阵 / `masked_fill`+softmax),再把"该关注谁"升级成可学习的 QKV——因果掩码、`1/√d` 缩放,最后封装成单个注意力头 `Head` | ✅   |
+| [`nanoGPT/gpt.py`](nanoGPT/gpt.py) | **Let's build GPT(下)** 完整 GPT 单文件实现:多头注意力 → 前馈网络 → 残差 + LayerNorm 的 `Block` 堆 6 层,超参数调小后在 M 芯片 Mac 上就能跑(原版要 A100 跑 15 分钟),训练完生成莎士比亚风格文本([样例 `more.txt`](more.txt)) | ✅   |
 | [`demo.ipynb`](demo.ipynb) / [`demo.py`](demo.py) | 开胃小菜:用 C++ 的 `vector<vector<...>>` 类比 PyTorch 张量,顺一遍 shape / view / 广播这些天天要打交道的东西                                                              | ✅   |
 | [`namesgenerator.py`](namesgenerator.py)       | **免训练版生成器**:加载 Part 5 训好的权重(`makemore/makemore_5/names_model.pt`),`python3 namesgenerator.py` 直接就出名字,不读语料、不训练                                                                     | ✅   |
 
-> ✅ 已完成 ｜ 🚧 建设中 ｜ ⬜ 未开始
->
-> **makemore Part 1 ~ Part 5 已全部完结 🎉**(每一章都有可跑的脚本 + 笔记本),学习路线上的下一站是 **Let's build GPT**,正在建设中。
+> ✅ 全系列已完结 🎉 —— micrograd → makemore Part 1~5 → Let's build GPT,每一章都有逐行注解的笔记本和一份能直接跑的脚本,可以直接通读,也可以对着视频按章跳读。
 
 ### Part 3 具体做了什么
 
@@ -86,7 +87,19 @@ Part 4 之前的网络都是一根筋:把上下文整段拍平成一长条,一�
 
 一条主线贯穿始终:**怎么让网络多看几个字符还不崩**。从 1 个字符到 3 个字符,靠嵌入 + 非线性把离散符号变成向量;从 3 层叠到 5 层,靠归一化把每层的分布拉回可控区间;从 3 个字符到 8 个字符,靠换一种组织信息的方式(分层合并)而不是硬堆全连接。而 micrograd 和 Part 4 则是在回答一个更底层的问题:**梯度到底从哪来**。
 
-至此 makemore 系列全部完结 ✅,下一站是 Transformer。
+至此 makemore 系列全部完结 ✅,下一章正式走进 Transformer。
+
+### Let's build GPT 具体做了什么
+
+任务从"生成名字"换成"生成莎士比亚",数据换成约 111 万字符的 tinyshakespeare(65 个唯一字符),模型也换成真正的主角——Transformer。
+
+1. **先立基线**:用 `nn.Embedding(vocab_size, vocab_size)` 实现一遍 bigram,loss 降到约 2.45 就不再动——这正是 bigram 的理论下限;想再往下走,模型必须"多读几个字符"
+2. **从"平均前文"到"注意力"**:先做最朴素的上下文聚合——每个位置把前面的激活值求平均(bag-of-words),手写循环、`tril` 矩阵、`masked_fill + softmax` 三种写法逐一用 `torch.allclose` 验证等价;再让"该关注谁"变成可学习的:每个 token 投影出 Q 和 K,点积当作亲密度,配合因果掩码只许往回看
+3. **把注意力做成一个头**:补上 V(决定"取走什么信息"),加上 `1/√d` 缩放(不缩放的话点积数值随维度变大,softmax 会变得极端尖锐),封装成 `Head` 类
+4. **补全一个 GPT**:笔记本讲完单个头就收了——后面 Andrej 改用 VSCode 直接改代码,于是把这部分整理成干净的单文件 [`gpt.py`](nanoGPT/gpt.py):多头注意力(8 个头并行关注不同模式)、前馈网络(升维 4 倍再降回,每个 token 自己"想一想")、`Block` = 注意力 + 前馈各自配上 LayerNorm 与残差(Pre-Norm),再堆 6 层,外加 token / 位置两张嵌入表、最后一层 LayerNorm 和输出头。注释里也顺手记下了那些小而致命的细节(`register_buffer` 才能让因果掩码跟着换设备、`nn.ModuleList` 才会注册多头参数、`train()/eval()` 影响 dropout)
+5. **跑起来**:原版超参数在 A100 上要跑 15 分钟,调小后 M 芯片 Mac 上就能跑;5000 步训练完,模型吐出莎士比亚腔的文本——对白、说话人和断句像模像样,单词则大多还是生造的,这就是"从零到会胡诌"的样子([`more.txt`](more.txt) 是 10000 字符的生成样例)
+
+> 🎉 到这里,Zero to Hero 主线(micrograd → makemore → GPT)全部完结,上面的每一份笔记都可以直接阅读、直接运行。
 
 ## 🧭 学习路线(Zero to Hero)
 
@@ -96,7 +109,7 @@ Part 4 之前的网络都是一根筋:把上下文整段拍平成一长条,一�
 4. **makemore Part 3** ✅ — Activations & Gradients & BatchNorm:激活诊断、死亡神经元、初始化与批归一化([视频](https://www.youtube.com/watch?v=P6sfmUTpUmc) / [代码](https://github.com/karpathy/makemore))
 5. **makemore Part 4** ✅ — Becoming a Backprop Ninja:扔掉 autograd 手动反向传播,每个中间量的梯度都跟 autograd 对拍([视频](https://www.youtube.com/watch?v=q8SA3rM6ckI) / [代码](https://github.com/karpathy/makemore))
 6. **makemore Part 5** ✅ — Building a WaveNet:上下文拉到 8 个字符,分层合并成树状结构,顺手把 PyTorch 的 `nn.Module` 拆开看([视频](https://www.youtube.com/watch?v=t3YJ5hKiMQ0) / [代码](https://github.com/karpathy/makemore))
-7. **Let's build GPT** ✅ — 从零手写 Transformer / GPT:自注意力、多头、残差、LayerNorm,一路写到 nanoGPT([视频](https://www.youtube.com/watch?v=kCc8FmEb1nY) / [代码](https://github.com/karpathy/ng-video-lecture))
+7. **Let's build GPT** ✅ — 从 bigram 基线一路手写 Transformer / GPT:自注意力、多头、残差、LayerNorm,最后整理成可本地运行的完整实现 [`nanoGPT/gpt.py`](nanoGPT/gpt.py)([视频](https://www.youtube.com/watch?v=kCc8FmEb1nY) / [代码](https://github.com/karpathy/ng-video-lecture))
 
 ## 🚀 快速开始
 
@@ -126,6 +139,14 @@ pip install -r requirements.txt
 python makemore/makemore_5/makemore_5.py
 ```
 
+- 最后的 GPT 章也一样,在仓库根目录执行即可(脚本按相对路径读 `input.txt`,根目录和 `nanoGPT/` 下各有一份相同的语料,两处都能执行):
+
+```bash
+python nanoGPT/gpt.py
+```
+
+训练 5000 步后,末尾会打印一段生成的文本,并把 10000 字符的样例写进当前目录的 `more.txt`(仓库根目录那份样例就是这么来的)。
+
 - 不想等训练、只想看成品?根目录的 `namesgenerator.py` 直接加载 Part 5 训好的权重采样名字:权重放在 `makemore/makemore_5/names_model.pt`(由 `makemore_5.py` 训练结束时写出,重训一次就会自动用上新的),模型结构、采样逻辑与 Part 5 一模一样,只是跳过了 20 万步训练:
 
 ```bash
@@ -150,7 +171,7 @@ python demo.py
 ## 📚 致谢与说明
 
 - 代码跟写自 Andrej Karpathy 的公开教程与仓库(MIT License),中文注释与整理为个人学习记录
-- 本人是初学者,注释里可能有理解不到位的地方,欢迎提 [issue](https://github.com/Muyu-Ch/zero-to-hero-zh/issues) 或 PR 指正
+- 全系列已完结,笔记与注释可以直接阅读;如有疏漏或不同理解,欢迎提 [issue](https://github.com/Muyu-Ch/zero-to-hero-zh/issues) 或 PR 交流指正
 - README是在我学习完之后由DeepSeek-v4-flash生成
 
 ## 📄 License
