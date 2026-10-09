@@ -139,7 +139,7 @@ pip install -r requirements.txt
 python makemore/makemore_5/makemore_5.py
 ```
 
-- 最后的 GPT 章也一样,在仓库根目录执行即可(脚本按相对路径读 `input.txt`,根目录和 `nanoGPT/` 下各有一份相同的语料,两处都能执行):
+- 最后的 GPT 章稍微不同:脚本按相对路径读 `input.txt`,所以要在仓库根目录或 `nanoGPT/` 目录下执行(两处各有一份相同的语料):
 
 ```bash
 python nanoGPT/gpt.py
@@ -162,7 +162,7 @@ pip install jupyterlab
 jupyter lab
 ```
 
-- 想先试试水和张量打交道的手感,可以跑根目录的 `demo.py`:
+- 想先试试和张量打交道的手感,可以跑根目录的 `demo.py`:
 
 ```bash
 python demo.py
